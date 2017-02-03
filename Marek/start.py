@@ -1,4 +1,5 @@
-import sys
+import sys, os
+
 from PyQt4 import QtCore, QtGui
 from TeRi import Ui_MainWindow
 
@@ -16,12 +17,16 @@ class StartQT4(QtGui.QMainWindow):
     def file_browse_txt_file(self):
         browserTxt = QtGui.QFileDialog(self)
         plikTxt = open(browserTxt.getOpenFileName())
-        #self.ui.path_txt_window.setText(plikTxt.read())
+        if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
+            self.ui.path_txt_window.setText(plikTxt.name)
+        else:
+            print("Hej")
+        #print(os.path.basename(plikTxt.name)[-4:])
 
     def file_browse_xml_file(self):
         browserXml =QtGui.QFileDialog(self)
         plikXml = open(browserXml.getOpenFileName())
-        #self.ui.path_xml_window.setText(plikXml.read())
+        self.ui.path_xml_window.setText(plikXml.name)
 
 
 
