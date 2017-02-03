@@ -20,13 +20,16 @@ class StartQT4(QtGui.QMainWindow):
         if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
             self.ui.path_txt_window.setText(plikTxt.name)
         else:
-            print("Hej")
+            print("Hej txt")
         #print(os.path.basename(plikTxt.name)[-4:])
 
     def file_browse_xml_file(self):
         browserXml =QtGui.QFileDialog(self)
         plikXml = open(browserXml.getOpenFileName())
-        self.ui.path_xml_window.setText(plikXml.name)
+        if os.path.basename(plikXml.name)[-4:] == '.xml':
+            self.ui.path_xml_window.setText(plikXml.name)
+        else:
+            print("Hej xml")
 
 
 
