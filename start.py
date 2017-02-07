@@ -1,6 +1,7 @@
 import os, sys
 
-from PyQt4 import QtCore, QtGui
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 from MainWindow import *
 from os.path import isfile
 
@@ -24,7 +25,7 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
                 self.ui.path_txt_window.setText(plikTxt.name)
             else:
-                print("Hej txt")
+                self.showdialog()
             #print(os.path.basename(plikTxt.name)[-4:])
 
     def browse_xml_file(self):
@@ -35,7 +36,21 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikXml.name)[-4:] == '.xml':
                 self.ui.path_xml_window.setText(plikXml.name)
             else:
-                print("Hej xml")
+                self.showdialog()
+
+    def showdialog(self):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Information)
+
+
+        msg.setText("Notification")
+        msg.setInformativeText("This is additional information")
+        msg.setWindowTitle("Notification")
+        msg.setStandardButtons(QMessageBox.Ok)
+
+        retval = msg.exec()
+        print(retval)
+
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
