@@ -25,7 +25,7 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
                 self.ui.path_txt_window.setText(plikTxt.name)
             else:
-                self.showdialog()
+                self.showdialog(0)
             #print(os.path.basename(plikTxt.name)[-4:])
 
     def browse_xml_file(self):
@@ -36,15 +36,17 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikXml.name)[-4:] == '.xml':
                 self.ui.path_xml_window.setText(plikXml.name)
             else:
-                self.showdialog()
+                self.showdialog(1)
 
-    def showdialog(self):
+    def showdialog(self, button):
         msg = QMessageBox()
-        msg.setIcon(QMessageBox.Information)
+        msg.setIcon(QMessageBox.Warning)
 
-
-        msg.setText("Notification")
-        msg.setInformativeText("This is additional information")
+        msg.setText("Info:")
+        if button == 0:
+            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .txt lub .scv")
+        elif button == 1:
+            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .xml")
         msg.setWindowTitle("Notification")
         msg.setStandardButtons(QMessageBox.Ok)
 
