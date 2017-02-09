@@ -68,7 +68,7 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        MainWindow.setWindowTitle(_translate("MainWindow", "TeRi", None))
         self.button_close.setText(_translate("MainWindow", "Zamknij", None))
         self.browse_txt_button.setText(_translate("MainWindow", "Browse", None))
         self.browse_xml_button.setText(_translate("MainWindow", "Browse", None))
