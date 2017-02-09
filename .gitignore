@@ -1,8 +1,4 @@
 *.pyc
-
 __pycache__
-
-Test.py
-
-test_2.py
 .idea
+rome_rel2_protokolltestresults.xls
