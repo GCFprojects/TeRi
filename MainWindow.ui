@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="result_window">
+   <widget class="QTextEdit" name="resultWindow">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -96,7 +96,7 @@
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="logs_button">
+   <widget class="QPushButton" name="logsButton">
     <property name="geometry">
      <rect>
       <x>130</x>
