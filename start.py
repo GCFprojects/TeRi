@@ -1,9 +1,11 @@
 import os, sys
 
+
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from MainWindow import *
 from os.path import isfile
+from test.compareFiles import *
 
 class StartQT4(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -16,6 +18,8 @@ class StartQT4(QtGui.QMainWindow):
         # Wlasne polaczenia slotow
         QtCore.QObject.connect(self.ui.browse_txt_button, QtCore.SIGNAL("clicked()"), self.browse_txt_file)
         QtCore.QObject.connect(self.ui.browse_xml_button, QtCore.SIGNAL("clicked()"), self.browse_xml_file)
+        QtCore.QObject.connect(self.ui.startButton, QtCore.SIGNAL("clicked()"), self.startProcess)
+        QtCore.QObject.connect(self.ui.logsButton, QtCore.SIGNAL("clicked()"), self.showLogs)
 
     # Wyszukiwarka plików txt i csv
     def browse_txt_file(self):
@@ -26,7 +30,7 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
                 self.ui.path_txt_window.setText(os.path.basename(plikTxt.name))
             else:
-                self.showdialog(0)
+                self.showDialog(0)
 
     # Wyszukiwarka plików xls i xlsx
     def browse_xml_file(self):
@@ -37,10 +41,10 @@ class StartQT4(QtGui.QMainWindow):
             if os.path.basename(plikXml.name)[-4:] == '.xls' or os.path.basename(plikXml.name)[-5:] == '.xlsx':
                 self.ui.path_xml_window.setText(os.path.basename(plikXml.name))
             else:
-                self.showdialog(1)
+                self.showDialog(1)
 
     # Popup informujący o błędnym rozszeżeniu pliku
-    def showdialog(self, button):
+    def showDialog(self, button):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Warning)
 
@@ -53,6 +57,13 @@ class StartQT4(QtGui.QMainWindow):
         msg.setStandardButtons(QMessageBox.Ok)
 
         retval = msg.exec()
+
+    def startProcess(self):
+        compareFiles(plikTxt, plikXml)
+
+    def showLogs(self):
+
+        print('Logs')
 
 
 if __name__ == "__main__":
