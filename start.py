@@ -5,7 +5,6 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from MainWindow import *
 from os.path import isfile
-from test.compareFiles import *
 
 class StartQT4(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -13,7 +12,7 @@ class StartQT4(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Ustawienie wartosci poczatkowej dla okien browser`ow
-        self.ui.path_txt_window.setText("Wskarz ścieżkę do pliku txt")
+        self.ui.path_txt_window.setText("Wskarz ścieżkę do pliku txt lub csv")
         self.ui.path_xml_window.setText("Wskarz ścieżkę do pliku xml")
         # Wlasne polaczenia slotow
         QtCore.QObject.connect(self.ui.browse_txt_button, QtCore.SIGNAL("clicked()"), self.browse_txt_file)
@@ -29,6 +28,7 @@ class StartQT4(QtGui.QMainWindow):
             plikTxt = open(self.filename)
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
                 self.ui.path_txt_window.setText(os.path.basename(plikTxt.name))
+                return plikTxt
             else:
                 self.showDialog(0)
 
@@ -40,6 +40,7 @@ class StartQT4(QtGui.QMainWindow):
             plikXml = open(self.filename)
             if os.path.basename(plikXml.name)[-4:] == '.xls' or os.path.basename(plikXml.name)[-5:] == '.xlsx':
                 self.ui.path_xml_window.setText(os.path.basename(plikXml.name))
+                return plikXml
             else:
                 self.showDialog(1)
 
@@ -50,7 +51,7 @@ class StartQT4(QtGui.QMainWindow):
 
         msg.setText("Info:")
         if button == 0:
-            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .txt lub .scv")
+            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .txt lub .csv")
         elif button == 1:
             msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .xml")
         msg.setWindowTitle("Notification")
@@ -59,8 +60,7 @@ class StartQT4(QtGui.QMainWindow):
         retval = msg.exec()
 
     def startProcess(self):
-        compareFiles(plikTxt, plikXml)
-
+        print('Hello')
     def showLogs(self):
 
         print('Logs')
