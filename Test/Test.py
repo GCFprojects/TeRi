@@ -1,8 +1,2 @@
-
-
-class matematyka(object):
-    def dodawanie(a, b):
-        return a + b
-
-    def odejmowanie(a, b):
-        return a - b
+str = ["testing", "1", "2", "3"]
+print(str[0])
