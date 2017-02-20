@@ -12,8 +12,8 @@ class StartQT4(QtGui.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Ustawienie wartosci poczatkowej dla okien browser`ow
-        self.ui.path_txt_window.setText("Wskarz ścieżkę do pliku txt lub csv")
-        self.ui.path_xml_window.setText("Wskarz ścieżkę do pliku xml")
+        self.ui.path_txt_window.setText("Wskaż ścieżkę do pliku txt lub csv")
+        self.ui.path_xml_window.setText("Wskaż ścieżkę do pliku xml")
         # Wlasne polaczenia slotow
         QtCore.QObject.connect(self.ui.browse_txt_button, QtCore.SIGNAL("clicked()"), self.browse_txt_file)
         QtCore.QObject.connect(self.ui.browse_xml_button, QtCore.SIGNAL("clicked()"), self.browse_xml_file)
