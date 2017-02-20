@@ -4,17 +4,15 @@ import os
 def start():
     plikTxt = open('Test\Status.csv')
     count = sum(1 for line in open('Test\Status.csv'))-1
-    print(count)
     tab = []
     for s in range(count):
         line = plikTxt.readline()
         tab.append(primFormat(line))
 
-    if tab[s][0] != 'Test':
-        checkTC(tab[s])
-    else:
+    if tab[0][0] == 'Test':
         createFile(tab[0])
 
+    checkTC(tab, count)
 
 # Formatowanie tekstu. Tworzenie listy, usówanie cudzysłowów. Funkcja zwraca listę
 def primFormat(line):
@@ -34,13 +32,13 @@ def createFile(tab):
     for item in tab:
         warning.write("%s, " % item)
 
-def checkTC(tab):
-    tab1 = tab
-    tab2 = []
-    if len(tab2 == 0):
-        print("empty list tab2")
-        tab2 = tab1
-    elif tab1[0] == tab2[0]:
-        print('tak')
-start()
+def checkTC(tab, count):
+    tabCompare = tab[0]
 
+    for item in range(count):
+        if tab[item][0] != tabCompare[0][0]:
+            True
+        else:
+            True
+
+start()
