@@ -33,12 +33,21 @@ def createFile(tab):
         warning.write("%s, " % item)
 
 def checkTC(tab, count):
-    tabCompare = tab[0]
-
+    tabToCompare = tab[0]
+    tcList = []
+    licznik = 0
     for item in range(count):
-        if tab[item][0] != tabCompare[0][0]:
-            True
+        if tab[item][0] == tabToCompare[0]:
+            tcList.append(tab[item])
         else:
-            True
+            if tcList != 0:
+                checkTcList(tcList)
+                tcList.clear()
+                tabToCompare = tab[item]
+                licznik += 1
+    print(licznik)
 
+
+def checkTcList(tcList):
+    print(tcList)
 start()
