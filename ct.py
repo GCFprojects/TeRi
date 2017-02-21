@@ -40,7 +40,7 @@ def checkTC(tab, count):
         if tab[item][0] == tabToCompare[0]:
             tcList.append(tab[item])
         else:
-            if tcList != 0:
+            if len(tcList) != 0:
                 checkTcList(tcList)
                 tcList.clear()
                 tabToCompare = tab[item]
