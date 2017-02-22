@@ -13,7 +13,6 @@ def start():
         createFile(tab[0])
 
     checkTC(tab, count)
-
 # Formatowanie tekstu. Tworzenie listy, usówanie cudzysłowów. Funkcja zwraca listę
 def primFormat(line):
     tab = []
@@ -31,23 +30,27 @@ def createFile(tab):
     warning = open("Test\Warnings.txt", "w+")
     for item in tab:
         warning.write("%s, " % item)
-
+# Porównywanie TC. Tworzenie listy list posiadających te same TC. Przekazywanie listy tcList do funkcji checkTcList
 def checkTC(tab, count):
     tabToCompare = tab[0]
     tcList = []
     licznik = 0
     for item in range(count):
         if tab[item][0] == tabToCompare[0]:
-            tcList.append(tab[item])
+            tcList.append(tabToCompare)
+            tabToCompare = tab[item]
         else:
             if len(tcList) != 0:
+                tcList.append(tabToCompare)
                 checkTcList(tcList)
                 tcList.clear()
-                tabToCompare = tab[item]
-                licznik += 1
-    print(licznik)
-
+            tabToCompare = tab[item]
 
 def checkTcList(tcList):
-    print(tcList)
+    countPass = 0
+    countFail = 0
+    paramList = ''
+    for item in range(len(tcList)):
+        paramList = tcList[item][1]
+        print('%s\n' % paramList)
 start()
