@@ -4,6 +4,7 @@ import os
 def start():
     plikTxt = open('Test\Status.csv')
     count = sum(1 for line in open('Test\Status.csv'))-1
+
     tab = []
     for s in range(count):
         line = plikTxt.readline()
@@ -11,7 +12,8 @@ def start():
 
     if tab[0][0] == 'Test':
         createFile(tab[0])
-
+    tab.remove(tab[0])
+    count = sum(1 for line in tab)
     checkTC(tab, count)
 # Formatowanie tekstu. Tworzenie listy, usówanie cudzysłowów. Funkcja zwraca listę
 def primFormat(line):
@@ -29,14 +31,15 @@ def primFormat(line):
 def createFile(tab):
     warning = open("Test\Warnings.txt", "w+")
     for item in tab:
-        warning.write("%s, " % item)
+        warning.write("{}, ".format(item))
 # Porównywanie TC. Tworzenie listy list posiadających te same TC. Przekazywanie listy tcList do funkcji checkTcList
 def checkTC(tab, count):
     tabToCompare = tab[0]
     tcList = []
-    licznik = 0
     for item in range(count):
-        if tab[item][0] == tabToCompare[0]:
+        if tabToCompare == tab[item]:
+            continue
+        elif tab[item][0] == tabToCompare[0]:
             tcList.append(tabToCompare)
             tabToCompare = tab[item]
         else:
@@ -52,5 +55,7 @@ def checkTcList(tcList):
     paramList = ''
     for item in range(len(tcList)):
         paramList = tcList[item][1]
-        print('%s\n' % paramList)
+        if paramList != 'Parameter':
+            True
+        #print('{}, {}\n'.format(tcList[item][0], paramList))
 start()
