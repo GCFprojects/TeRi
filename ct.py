@@ -11,7 +11,10 @@ def start():
         tab.append(primFormat(line))
 
     if tab[0][0] == 'Test':
-        createFile(tab[0])
+        warning = open("Test\Warnings.txt", "w+")
+        for item in tab:
+            warning.write("{}, ".format(item))
+        warning.close()
     tab.remove(tab[0])
     count = sum(1 for line in tab)
     checkTC(tab, count)
@@ -27,11 +30,10 @@ def primFormat(line):
             string = string[1:len(string) - 1]
         tab.append(string)
     return tab
-# Tworzenie pliku Warnings zapisywanie
-def createFile(tab):
-    warning = open("Test\Warnings.txt", "w+")
-    for item in tab:
-        warning.write("{}, ".format(item))
+# Wpisywanie do plików
+def writeToFile(tab, tab2 = []):
+    if len(tab2) == 0:
+        True
 # Porównywanie TC. Tworzenie listy list posiadających te same TC. Przekazywanie listy tcList do funkcji checkTcList
 def checkTC(tab, count):
     tabToCompare = tab[0]
@@ -50,12 +52,26 @@ def checkTC(tab, count):
             tabToCompare = tab[item]
 
 def checkTcList(tcList):
+    count = 0
     countPass = 0
     countFail = 0
-    paramList = ''
-    for item in range(len(tcList)):
-        paramList = tcList[item][1]
-        if paramList != 'Parameter':
-            True
-        #print('{}, {}\n'.format(tcList[item][0], paramList))
+    paramList = []
+    for item in range(len(tcList)): #Pętla dla całej przekazanej listy list.
+        if len(paramList) != 0: #Warunek sprawdzający wartość listy paramList
+            count += 1 #Licznik zwiększający swoją wartość
+            for s in range(len(tcList)-count): #Sprawdzam tu wszystkie kolejne listy za listą wpisaną do paramList
+                if paramList[1] == tcList[s+count][1]: #Porównanie parametrów w liście paramList i tcList
+                    if paramList[2] == 'PASS': #Sprawdzam rezultat wpisany do paramList. Jeżeli PASS to:
+                            paramList = tcList[s+count] #pobieramy kolejny rekord z tcList
+                        else:
+                            writeToFile(paramList, tcList[s+count])
+                    else:
+                        writeToFile(paramList)
+                else:
+                    True
+                input()
+            paramList = tcList[item]
+        else: #Jeżeli warunek len(paramList) != 0 nie jest spełniony
+            paramList = tcList[item] #wpisujemy do listy paramList pierwszy rekord z listy list tcList
+
 start()
