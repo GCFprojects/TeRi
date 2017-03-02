@@ -22,9 +22,9 @@ def start():
 def primFormat(line):
     tab = []
     line = line.split(",")
-    for b in range(9):
+    for b in range(len(line)):
         string = line[b]
-        if b == 8:
+        if b == (len(line)-1):
             string = string[1:len(string) - 2]
         else:
             string = string[1:len(string) - 1]
