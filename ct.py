@@ -47,14 +47,22 @@ def checkTC(tab, count):
         else:
             if len(tcList) != 0:
                 tcList.append(tabToCompare)
-                checkTcList(tcList)
+                checkResultList(tcList)
                 tcList.clear()
             tabToCompare = tab[item]
+# Usówanie list posiadające puste pole rezultatów
+def checkResultList(tcList):
+    count = 0
+    tab = []
+    for item in range(len(tcList)):
+        tab = tcList[item-count]
+        if tab[2] == '':
+            tcList.remove(tab)
+            count += 1
+    checkTcList(tcList)
 
 def checkTcList(tcList):
     count = 0
-    countPass = 0
-    countFail = 0
     paramList = []
     for item in range(len(tcList)): #Pętla dla całej przekazanej listy list.
         if len(paramList) != 0: #Warunek sprawdzający wartość listy paramList
@@ -62,16 +70,16 @@ def checkTcList(tcList):
             for s in range(len(tcList)-count): #Sprawdzam tu wszystkie kolejne listy za listą wpisaną do paramList
                 if paramList[1] == tcList[s+count][1]: #Porównanie parametrów w liście paramList i tcList
                     if paramList[2] == 'PASS': #Sprawdzam rezultat wpisany do paramList. Jeżeli PASS to:
-                            paramList = tcList[s+count] #pobieramy kolejny rekord z tcList
-                        else:
-                            writeToFile(paramList, tcList[s+count])
-                    else:
-                        writeToFile(paramList)
-                else:
-                    True
+                        if tcList[s+count][2] == 'PASS': # Sprawdzamy rezultat wpisany do tcList. Jeżeli PASS to:
+                            paramList = tcList[s+count] # Wpisuję do listy paramList kolejną listę z listy list tcList
+                        else: #Jeżeli warunek tcList[s+count][2] == 'PASS' nie jest spełniony to:
+                            writeToFile(paramList, tcList[s+count]) #Wpisuje obie listy do pliku Error
+                    else: #Jeżeli warunek paramList[2] == 'PASS' nie jest spełniony to:
+                        True
+                else: #Jeżeli warunek paramList[1] == tcList[s+count][1] nie jest spełniony to:
+                    True # Pobieramy koeleny rekord z listy tcList
                 input()
             paramList = tcList[item]
         else: #Jeżeli warunek len(paramList) != 0 nie jest spełniony
-            paramList = tcList[item] #wpisujemy do listy paramList pierwszy rekord z listy list tcList
-
+            paramList = tcList[item] #wpisujemy do listy paramList pierwszą listę z listy list tcList
 start()
