@@ -1,2 +1,7 @@
-str = ["testing", "1", "2", "3"]
-print(str[0])
+a = 5
+for i in range(a):
+    print(i)
+    if a == 5:
+        break
+    else:
+        True
