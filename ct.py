@@ -69,15 +69,20 @@ def checkTcList(tcList):
             count += 1 #Licznik zwiększający swoją wartość
             for s in range(len(tcList)-count): #Sprawdzam tu wszystkie kolejne listy za listą wpisaną do paramList
                 if paramList[1] == tcList[s+count][1]: #Porównanie parametrów w liście paramList i tcList
+                    print('tcList: {}\nparamList: {}'.format(paramList, tcList[s+count]))
                     if paramList[2] == 'PASS': #Sprawdzam rezultat wpisany do paramList. Jeżeli PASS to:
                         if tcList[s+count][2] == 'PASS': # Sprawdzamy rezultat wpisany do tcList. Jeżeli PASS to:
                             paramList = tcList[s+count] # Wpisuję do listy paramList kolejną listę z listy list tcList
                         else: #Jeżeli warunek tcList[s+count][2] == 'PASS' nie jest spełniony to:
                             writeToFile(paramList, tcList[s+count]) #Wpisuje obie listy do pliku Error
-                    else: #Jeżeli warunek paramList[2] == 'PASS' nie jest spełniony to:
-                        True
-                else: #Jeżeli warunek paramList[1] == tcList[s+count][1] nie jest spełniony to:
-                    True # Pobieramy koeleny rekord z listy tcList
+                    elif paramList[2] == 'FAIL' or paramList[2] == 'INVALID' or paramList[2] == 'INCONCLUSIVE': #Jeżeli warunek paramList[2] == 'PASS' nie jest spełniony to:
+                        if tcList[s+count][2] == 'FAIL' or tcList[s+count][2] == 'INVALID' or tcList[s+count][2] == 'INCONCLUSIVE':
+                            True
+                        elif tcList[s+count][2] == 'PASS':
+                            True
+                else:
+                    paramList = tcList[s+count]
+                    break
                 input()
             paramList = tcList[item]
         else: #Jeżeli warunek len(paramList) != 0 nie jest spełniony
