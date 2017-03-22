@@ -11,13 +11,11 @@ def start():
         tab.append(primFormat(line))
 
     if tab[0][0] == 'Test':
-        warning = open("Test\Warnings.txt", "w+")
-        for item in tab:
-            warning.write("{}, ".format(item))
-        warning.close()
-    tab.remove(tab[0])
-    count = sum(1 for line in tab)
-    checkTC(tab, count)
+        writeToFile(tab[s], 'Test')
+        tab.remove(tab[0])
+
+    tab = deleteListsWithoutResults(tab)
+    checkTC(tab)
 # Formatowanie tekstu. Tworzenie listy, usówanie cudzysłowów. Funkcja zwraca listę
 def primFormat(line):
     tab = []
@@ -31,60 +29,77 @@ def primFormat(line):
         tab.append(string)
     return tab
 # Wpisywanie do plików
-def writeToFile(tab, tab2 = []):
-    if len(tab2) == 0:
-        True
+def writeToFile(tab, param=None):
+    if param == 'Result':
+        result = open("Test\Results.txt", "a")
+        for item in tab:
+            result.write('\n')
+            for i in item:
+                result.write('{}, '.format(i))
+        result.close()
+    elif param == 'Warning':
+        warning = open("Test\Warnings.txt", "a")
+        for item in tab:
+            warning.write('\n')
+            for i in item:
+                warning.write('{}, '.format(i))
+    elif param == 'Test':
+        result = open("Test\Results.txt", "w+")
+        for item in tab:
+            result.write('{}, '.format(item))
+        result.close()
+        warning = open("Test\Warnings.txt", "w+")
+        for item in tab:
+            warning.write('{}, '.format(item))
+        warning.close()
 # Porównywanie TC. Tworzenie listy list posiadających te same TC. Przekazywanie listy tcList do funkcji checkTcList
-def checkTC(tab, count):
-    tabToCompare = tab[0]
-    tcList = []
-    for item in range(count):
-        if tabToCompare == tab[item]:
-            continue
-        elif tab[item][0] == tabToCompare[0]:
-            tcList.append(tabToCompare)
-            tabToCompare = tab[item]
-        else:
-            if len(tcList) != 0:
-                tcList.append(tabToCompare)
-                checkResultList(tcList)
-                tcList.clear()
-            tabToCompare = tab[item]
-# Usówanie list posiadające puste pole rezultatów
-def checkResultList(tcList):
-    count = 0
-    tab = []
-    for item in range(len(tcList)):
-        tab = tcList[item-count]
-        if tab[2] == '':
-            tcList.remove(tab)
-            count += 1
-    checkTcList(tcList)
+def checkTC(tab):
+    tabToCompare = []
+    for item in tab:
+        list = [x for x in tab if x[0] == item[0]]
+        if len(tabToCompare) == 0:
+            if len(list) > 1:
+                tempList = checkParameterAndResult(list)
+                tabToCompare.extend(tempList)
+            elif len(list) == 1:
+                writeToFile(list, 'Result')
 
-def checkTcList(tcList):
-    count = 0
-    paramList = []
-    for item in range(len(tcList)): #Pętla dla całej przekazanej listy list.
-        if len(paramList) != 0: #Warunek sprawdzający wartość listy paramList
-            count += 1 #Licznik zwiększający swoją wartość
-            for s in range(len(tcList)-count): #Sprawdzam tu wszystkie kolejne listy za listą wpisaną do paramList
-                if paramList[1] == tcList[s+count][1]: #Porównanie parametrów w liście paramList i tcList
-                    print('tcList: {}\nparamList: {}'.format(paramList, tcList[s+count]))
-                    if paramList[2] == 'PASS': #Sprawdzam rezultat wpisany do paramList. Jeżeli PASS to:
-                        if tcList[s+count][2] == 'PASS': # Sprawdzamy rezultat wpisany do tcList. Jeżeli PASS to:
-                            paramList = tcList[s+count] # Wpisuję do listy paramList kolejną listę z listy list tcList
-                        else: #Jeżeli warunek tcList[s+count][2] == 'PASS' nie jest spełniony to:
-                            writeToFile(paramList, tcList[s+count]) #Wpisuje obie listy do pliku Error
-                    elif paramList[2] == 'FAIL' or paramList[2] == 'INVALID' or paramList[2] == 'INCONCLUSIVE': #Jeżeli warunek paramList[2] == 'PASS' nie jest spełniony to:
-                        if tcList[s+count][2] == 'FAIL' or tcList[s+count][2] == 'INVALID' or tcList[s+count][2] == 'INCONCLUSIVE':
-                            True
-                        elif tcList[s+count][2] == 'PASS':
-                            True
-                else:
-                    paramList = tcList[s+count]
-                    break
-                input()
-            paramList = tcList[item]
-        else: #Jeżeli warunek len(paramList) != 0 nie jest spełniony
-            paramList = tcList[item] #wpisujemy do listy paramList pierwszą listę z listy list tcList
+        elif list != tabToCompare:
+            tabToCompare.clear()
+            tabToCompare.extend(list)
+            print('List:\n{}\nTabToCompare:\n{}\n'.format(list, tabToCompare))
+            input()
+# Usówanie list, które posiadają puste pole rezultatów
+def deleteListsWithoutResults(tcList):
+    tab = [item for item in tcList if item[2] == '']
+    for rm in tab:
+        tcList.remove(rm)
+    return tcList
+
+def checkParameterAndResult(tcList):
+    #Deklaracje List
+    uniqueLists = []
+    dublicateLists = []
+    #Pętla tworząca listę unikalnych list oraz dublikatów
+    for item in range(len(tcList)):
+        #Do listy tab zapisywane są listy filtrowane po parametrze
+        tab = [x for x in tcList if x[1] == tcList[item][1]]
+        #Tworzymy pętle z unikatowymi wpisami
+        if len(tab) == 1:
+            uniqueLists.extend(tab)
+        #Tworzymy listę dublikatów.
+        elif len(tab) > 1:
+            passResults = [x for x in tab if x[2] == 'PASS']
+            failResults = [x for x in tab if x[2] != 'PASS']
+            if len(passResults) == len(tab) or len(failResults) == len(tab):
+                if tab[-1] not in uniqueLists:
+                    uniqueLists.append(tab[-1])
+            else:
+                writeToFile(tab, 'Warning')
+    writeToFile(uniqueLists, 'Result')
+
+    # print()
+    # print('uniqueLists: \n{}'.format(uniqueLists))
+    #input()
+
 start()
