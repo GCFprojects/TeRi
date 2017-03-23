@@ -11,7 +11,7 @@ def start():
         tab.append(primFormat(line))
 
     if tab[0][0] == 'Test':
-        writeToFile(tab[s], 'Test')
+        writeToFile(tab[0], 'Test')
         tab.remove(tab[0])
 
     tab = deleteListsWithoutResults(tab)
@@ -54,28 +54,30 @@ def writeToFile(tab, param=None):
         warning.close()
 # Porównywanie TC. Tworzenie listy list posiadających te same TC. Przekazywanie listy tcList do funkcji checkTcList
 def checkTC(tab):
-    tabToCompare = []
+    tempList = []
     for item in tab:
         list = [x for x in tab if x[0] == item[0]]
-        if len(tabToCompare) == 0:
-            if len(list) > 1:
-                tempList = checkParameterAndResult(list)
-                tabToCompare.extend(tempList)
-            elif len(list) == 1:
-                writeToFile(list, 'Result')
 
-        elif list != tabToCompare:
-            tabToCompare.clear()
-            tabToCompare.extend(list)
-            print('List:\n{}\nTabToCompare:\n{}\n'.format(list, tabToCompare))
-            input()
+        if len(tempList) == 0:
+            tempList.extend(list)
+            if len(tempList) > 1:
+                checkParameterAndResult(tempList)
+            elif len(tempList) == 1:
+                writeToFile(tempList, 'Result')
+        elif tempList != list:
+            tempList.clear()
+            tempList.extend(list)
+            if len(tempList) > 1:
+                checkParameterAndResult(tempList)
+            elif len(tempList) == 1:
+                writeToFile(tempList, 'Result')
 # Usówanie list, które posiadają puste pole rezultatów
 def deleteListsWithoutResults(tcList):
     tab = [item for item in tcList if item[2] == '']
     for rm in tab:
         tcList.remove(rm)
     return tcList
-
+#
 def checkParameterAndResult(tcList):
     #Deklaracje List
     uniqueLists = []
@@ -97,9 +99,5 @@ def checkParameterAndResult(tcList):
             else:
                 writeToFile(tab, 'Warning')
     writeToFile(uniqueLists, 'Result')
-
-    # print()
-    # print('uniqueLists: \n{}'.format(uniqueLists))
-    #input()
 
 start()
