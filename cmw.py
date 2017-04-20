@@ -1,3 +1,5 @@
+import openpyxl
+
 def copy_result():
 
     file=open('C:\\Python35\\cmw500.txt')
@@ -30,4 +32,3 @@ def copy_result():
                 TC_not_found.write=(str(line)+'\n')
                 TC_not_found.close()
             break
-    

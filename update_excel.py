@@ -1,3 +1,5 @@
+import openpyxl
+
 def update_excel():
     TC_added=open('TC_added.txt','a')
     TC_added.write=('Following TC results were added in Excel:\n\n')
