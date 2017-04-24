@@ -7,7 +7,6 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from ImportResultsToExcel import sheets
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -24,7 +23,6 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.resize(912, 591)
@@ -59,15 +57,12 @@ class Ui_MainWindow(object):
         self.excelSheets.setFlat(False)
         self.excelSheets.setCheckable(False)
         self.excelSheets.setObjectName(_fromUtf8("excelSheets"))
-        # self.comboBox = QtGui.QComboBox(self.excelSheets)
-        # self.comboBox.setGeometry(QtCore.QRect(30, 20, 171, 22))
-        # self.comboBox.setObjectName(_fromUtf8("comboBox"))
-        # # try:
-        # #     for item in range(len(sheets())):
-        # #         self.comboBox.addItem(_fromUtf8(""))
-        # # except TypeError:
-        # #     self.comboBox.addItem(_fromUtf8(""))
-        # self.comboBox.addItem(_fromUtf8(""))
+        self.comboBox = QtGui.QComboBox(self.excelSheets)
+        self.comboBox.setGeometry(QtCore.QRect(30, 20, 171, 22))
+        self.comboBox.setObjectName(_fromUtf8("comboBox"))
+        self.comboBox.addItem(_fromUtf8(""))
+        self.comboBox.addItem(_fromUtf8(""))
+        self.comboBox.addItem(_fromUtf8(""))
         self.textBrowser = QtGui.QTextBrowser(self.excelSheets)
         self.textBrowser.setGeometry(QtCore.QRect(100, 50, 131, 31))
         self.textBrowser.setObjectName(_fromUtf8("textBrowser"))
@@ -87,7 +82,6 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
         self.actionZamknij = QtGui.QAction(MainWindow)
         self.actionZamknij.setObjectName(_fromUtf8("actionZamknij"))
-        self.load(MainWindow)
 
         self.retranslateUi(MainWindow)
         QtCore.QObject.connect(self.button_close, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
@@ -101,74 +95,8 @@ class Ui_MainWindow(object):
         self.startButton.setText(_translate("MainWindow", "Start", None))
         self.logsButton.setText(_translate("MainWindow", "Logi", None))
         self.excelSheets.setTitle(_translate("MainWindow", "Wybierz zakładkę z excel`a", None))
-        self.comboBox.setItemText(0, _translate("MainWindow", "None", None))
-        # try:
-        #     count = 1
-        #     for item in sheets():
-        #         self.comboBox.setItemText(count, _translate("MainWindow", item, None))
-        #         count += 1
-        # except TypeError:
-        #     self.comboBox.setItemText(0, _translate("MainWindow", 'None', None))
+        self.comboBox.setItemText(0, _translate("MainWindow", "2G", None))
+        self.comboBox.setItemText(1, _translate("MainWindow", "3G", None))
+        self.comboBox.setItemText(2, _translate("MainWindow", "AT&T", None))
         self.actionZamknij.setText(_translate("MainWindow", "Zamknij", None))
-
-    def load(self, sheets = None):
-        """
-        
-        :param MainWindow: 
-        :param sheets: 
-        :return: 
-        """
-        self.comboBox = QtGui.QComboBox(self.excelSheets)
-        self.comboBox.setGeometry(QtCore.QRect(30, 20, 171, 22))
-        self.comboBox.setObjectName(_fromUtf8("comboBox"))
-        # self.comboBox.clear()
-
-        try:
-            to_fill = list(sheets)
-        except Exception as e:
-            to_fill = []
-
-
-
-
-        print("###")
-        print(to_fill)
-        print("##$$$")
-
-        try:
-            for item in to_fill:
-                self.comboBox.addItem(_fromUtf8("abc"))
-        except Exception as e:
-            print(e)
-
-
-
-                # self.comboBox.addItem(item)
-
-                # self.comboBox.addItem(_fromUtf8(item))
-
-
-                # self.comboBox.setItemText(0, _translate("MainWindow", item, None))
-            # self.comboBox.update()
-
-
-
-        # try:
-        #     self.comboBox.clear()
-        #     for item in range(len(sheets)):
-        #         self.comboBox.addItem(_fromUtf8(""))
-        #         self.comboBox.setItemText(0, _translate("MainWindow", sheets[item], None))
-        #         self.comboBox.update()
-        #     # self.retranslateUi(MainWindow)
-        #     print(sheets)
-        #     # for item in range(len(sheets())):
-        #     #     self.comboBox.addItem(_fromUtf8(""))
-        # except TypeError:
-        #self.comboBox.addItem(_fromUtf8("abc"))
-        #self.comboBox.addItem(_fromUtf8("aaa"))
-        #self.comboBox.addItem(_fromUtf8("sss"))
-        #self.comboBox.addItem(_fromUtf8("d"))
-        #self.comboBox.addItem(_fromUtf8("waq"))
-
-        #self.comboBox.addItem(_fromUtf8(""))
 
