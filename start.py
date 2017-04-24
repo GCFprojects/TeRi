@@ -7,12 +7,12 @@ from PyQt4.QtCore import *
 from MainWindow import *
 from os.path import isfile
 from ct import *
+#from ImportResultsToExcel import *
 
 
 # Zmienne globalne
 pathTxtFile = ''
 pathXmlFile = ''
-dir_path = ''
 
 class StartQT4(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -47,11 +47,11 @@ class StartQT4(QtGui.QMainWindow):
         self.filename = browserXml.getOpenFileName(self, 'Open file', "C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi")
         if isfile(self.filename):
             plikXml = open(self.filename)
-            if os.path.basename(plikXml.name)[-4:] == '.xls' or os.path.basename(plikXml.name)[-5:] == '.xlsx':
+            if os.path.basename(plikXml.name)[-4:] == '.xls':
                 self.ui.path_xml_window.setText(os.path.basename(plikXml.name))
                 global pathXmlFile
                 pathXmlFile = plikXml.name
-                self.loadComboBoxItems()
+                #self.loadComboBoxItems()
                 #return plikXml
             else:
                 self.showDialog(1)
@@ -95,7 +95,6 @@ class StartQT4(QtGui.QMainWindow):
         if pathTxtFile != '':
             if (start(pathTxtFile)) == 'Done':
                 self.showDialog(3)
-
         else:
             self.showDialog(2)
         # patchXmlFile zmienna globalna z ścieżką do pliku xml
