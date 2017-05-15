@@ -1,5 +1,5 @@
 import xlrd
-from xlrd import *
+from xlrd import open_workbook
 from xlwt import *
 from xlutils.copy import copy
 
@@ -9,7 +9,6 @@ def searchTcInExcel(txtLine):
     sheet = wb.sheet_by_name("2G")
     cell_value = sheet.cell(0,0).value
     for item in range(sheet.nrows):
-        # print(item+1, ": ", sheet.cell_value(item, 0))
         if sheet.cell_value(item, 0) == txtLine[0] and sheet.cell_value(item, 1) == txtLine[1]:
             if sheet.cell_value(item, 9) == '':
                 rb = copy(wb)
@@ -22,8 +21,6 @@ def searchTcInExcel(txtLine):
             # Jeżeli TC nie zostanie znaleziony w excelu to wpisz do pliku "TCnotFound.txt"
             pass
 
-def addResultToExcel():
-    pass
 
 def readTxtResultsFile():
     plikTxt = open("C:\\Users\\marek.polak\\Desktop\\TeRI_Results\\2017-04-21\\Results.txt")

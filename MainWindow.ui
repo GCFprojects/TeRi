@@ -141,16 +141,6 @@
        <string>2G</string>
       </property>
      </item>
-     <item>
-      <property name="text">
-       <string>3G</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>AT&amp;T</string>
-      </property>
-     </item>
     </widget>
     <widget class="QTextBrowser" name="textBrowser">
      <property name="geometry">
