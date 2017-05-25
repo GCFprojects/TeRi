@@ -6,8 +6,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from MainWindow import *
 from os.path import isfile
-from ct import *
-#from ImportResultsToExcel import *
+from ct import start
+from ImportResultsToExcel import readTxtResultsFile
 
 
 # Zmienne globalne
@@ -15,8 +15,8 @@ pathTxtFile = ''
 pathXmlFile = ''
 
 class StartQT4(QtGui.QMainWindow):
-    def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+    def __init__(self):
+        QtGui.QWidget.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # Ustawienie wartosci poczatkowej dla okien browser`ow
@@ -30,7 +30,7 @@ class StartQT4(QtGui.QMainWindow):
     # Wyszukiwarka plików txt i csv
     def browse_txt_file(self):
         browserTxt = QtGui.QFileDialog(self)
-        self.filename = browserTxt.getOpenFileName(self, 'Open file', "C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi")
+        self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\Zurich')
         if isfile(self.filename):
             plikTxt = open(self.filename)
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
@@ -44,7 +44,7 @@ class StartQT4(QtGui.QMainWindow):
 
     def browse_xml_file(self):
         browserXml = QtGui.QFileDialog(self)
-        self.filename = browserXml.getOpenFileName(self, 'Open file', "C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi")
+        self.filename = browserXml.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\Zurich')
         if isfile(self.filename):
             plikXml = open(self.filename)
             if os.path.basename(plikXml.name)[-4:] == '.xls':
@@ -92,9 +92,15 @@ class StartQT4(QtGui.QMainWindow):
         Funkcja przekazuje ścieżkę do plików.
         :return:
         """
-        if pathTxtFile != '':
-            if (start(pathTxtFile)) == 'Done':
-                self.showDialog(3)
+        if self.ui.automaticTestRun.isChecked():
+            testRunType = 'Automatic'
+        elif self.ui.manualTestRun.isChecked():
+            testRunType = 'Manual'
+        moduleNumber = self.ui.moduleNumber.text()
+        if pathTxtFile != '' and pathXmlFile != '':
+            logPatch = start(pathTxtFile)
+            # if (readTxtResultsFile(pathXmlFile=pathXmlFile, logPatch=logPatch, testRunType=testRunType, moduleNumber=moduleNumber)) == 'Done':
+            self.showDialog(3)
         else:
             self.showDialog(2)
         # patchXmlFile zmienna globalna z ścieżką do pliku xml
