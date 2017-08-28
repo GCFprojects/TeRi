@@ -1,25 +1,45 @@
-
+import os, sys
 import xlrd
+import xlwt
+import xlutils
+import datetime
 from xlutils.copy import copy
+from xlutils.save import save
 from xlutils.styles import Styles
 from xlwt import easyxf
 from ct import writeToFile
 
-def searchTcInExcel(resultTab, pathXmlFile, testRunType, moduleNumber):
+def readTxtResultsFile(logPatch):
+    plikTxt = open(logPatch+"\\Results.txt")
+    os.chdir(logPatch)
+    resultTab = []
+    for line in plikTxt:
+        line = line.split(",")
+        for i in range(len(line)):
+            line[i] = line[i].strip()
+        line.remove('')
+        if line[1] == 'none':
+            line[1] = ''
+        if line[0] != 'Test':
+            resultTab.append(line)
+
+    return resultTab
+
+def searchTcInExcel(pathXmlFile, logPatch, testRunType, moduleNumber, excelSheetName):
+    resultTab = readTxtResultsFile(logPatch=logPatch)
     if testRunType == 'Automatic':
         styleResultCell = easyxf('font: color blue, bold on; borders: left double; align: vert centre, horiz centre')
-        styleTimeCell = easyxf(num_format_str='h:mm:ss')
-        styleTestRunCell = easyxf('align: vert centre, horiz centre')
+        styleTimeCell = easyxf('align: vert centre, horiz centre', num_format_str='H:MM:SS' )
+        styleTestRunCell = easyxf('align: vert centre, horiz centre; borders: right double')
     elif testRunType == 'Manual':
         styleResultCell = easyxf('font: color green, bold on; borders: left double; align: vert centre, horiz centre')
-        # styleTimeCell = easyxf()
-        styleTestRunCell = easyxf('align: vert centre, horiz centre')
+        styleTimeCell = easyxf('align: vert centre, horiz centre', num_format_str='H:MM:SS')
+        styleTestRunCell = easyxf('align: vert centre, horiz centre; borders: right double')
 
-    wb = xlrd.open_workbook(pathXmlFile, formatting_info=True)
-    # wb = xlrd.open_workbook('C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi\\folderTestowy\\testExcel.xls', , formatting_info=True)
-    sheet = wb.sheet_by_name('3G')
+    wb = xlrd.open_workbook(pathXmlFile, formatting_info=True, on_demand=True)
+    sheet = wb.sheet_by_name(excelSheetName)
     rb = copy(wb)
-    rb_sheet = rb.get_sheet('3G')
+    rb_sheet = rb.get_sheet(excelSheetName)
     # Dla każdego elementu listy resultTab
     for tcList in resultTab:
         # Dla każdego indeksu od 0 do sheet.nrows
@@ -34,7 +54,6 @@ def searchTcInExcel(resultTab, pathXmlFile, testRunType, moduleNumber):
                         rb_sheet.write(item, 8, tcList[2][0], styleResultCell)
                         rb_sheet.write(item, 9, tcList[4], styleTimeCell)
                         rb_sheet.write(item, 10, moduleNumber, styleTestRunCell)
-                        rb.save(pathXmlFile)
                     # Jeżeli TC i parametr jest taki sam sprawdź czy pole wyniku i czasu NIE jest puste
                     elif sheet.cell_value(item, 8) != '' and sheet.cell_value(item, 9) != '':
                         # Jeżeli NIE są puste wprowadź log do pliku Results_alredy_exist_in_excel.txt
@@ -56,7 +75,6 @@ def searchTcInExcel(resultTab, pathXmlFile, testRunType, moduleNumber):
                                 rb_sheet.write(item, 8, tcList[2][0], styleResultCell)
                                 rb_sheet.write(item, 9, tcList[4], styleTimeCell)
                                 rb_sheet.write(item, 10, moduleNumber, styleTestRunCell)
-                                rb.save(pathXmlFile)
                             # Jeżeli pola parametr są takie same sprawdź czy pole wyniku i czasu NIE jest puste
                             elif sheet.cell_value(item+i, 8) != '' and sheet.cell_value(item, 9) != '':
                                 # Jeżeli NIE są puste wprowadź log do pliku Results_alredy_exist_in_excel.txt
@@ -73,20 +91,10 @@ def searchTcInExcel(resultTab, pathXmlFile, testRunType, moduleNumber):
 
 
 
-def readTxtResultsFile(pathXmlFile, logPatch, testRunType, moduleNumber):
-    plikTxt = open(logPatch+"\\Results.txt")
-    resultTab = []
-    for line in plikTxt:
-        line = line.split(",")
-        for i in range(len(line)):
-            line[i] = line[i].strip()
-        line.remove('')
-        if line[1] == 'none':
-            line[1] = ''
-        if line[0] != 'Test':
-            resultTab.append(line)
+    if os.path.basename(pathXmlFile[-14:]) == (str(datetime.date.today())+'.xls'):
+        wb.release_resources()
+        rb.save(os.path.basename(pathXmlFile))
+    else:
+        rb.save(pathXmlFile[:-4]+'_'+str(datetime.date.today())+'.xls')
 
-    searchTcInExcel(resultTab=resultTab, pathXmlFile=pathXmlFile, testRunType=testRunType, moduleNumber=moduleNumber)
     return 'Done'
-
-

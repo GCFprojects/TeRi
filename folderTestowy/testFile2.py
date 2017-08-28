@@ -1,11 +1,16 @@
-from xlrd import open_workbook
+import os
+import xlrd
+from xlrd import *
 from xlwt import *
-from xlutils.copy import copy
+from xlutils import copy, styles, save
 
 
-wb = open_workbook('C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi\\folderTestowy\\testExcel.xls')
-rb = copy(wb)
+book = open_workbook('C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi\\folderTestowy\\testExcel.xls', formatting_info=True)
+s = styles.Styles(book)
 
-s = rb.get_sheet(0)
-s.write(0,0,'Czesc')
-rb.save('C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi\\folderTestowy\\testExcel.xls')
+sheet = book.sheet_by_index(0)
+A1_style = easyxf('pattern: pattern solid;')
+A1_style.pattern.pattern_fore_colour = 0
+sheet.
+
+# rb.save('C:\\Python34\\Workspace\\GlobalLogic\\GCF project\\TeRi\\folderTestowy\\testExcel.xls')

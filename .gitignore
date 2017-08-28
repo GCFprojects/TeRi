@@ -4,3 +4,7 @@ __pycache__
 rome_rel2_protokolltestresults.xls
 TeRi
 excel_sheet.py
+dist
+build
+popupDialog.ui
+start.spec

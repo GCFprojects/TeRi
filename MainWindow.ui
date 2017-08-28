@@ -2,19 +2,49 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>867</width>
-    <height>575</height>
+    <height>578</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>867</width>
+    <height>578</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>867</width>
+    <height>578</height>
+   </size>
+  </property>
+  <property name="sizeIncrement">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>TeRI</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTextEdit" name="resultWindow">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -22,6 +52,9 @@
       <width>601</width>
       <height>391</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
    </widget>
    <widget class="QPushButton" name="button_close">
@@ -64,6 +97,9 @@
     </property>
    </widget>
    <widget class="QTextEdit" name="path_txt_window">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -73,7 +109,7 @@
      </rect>
     </property>
     <property name="readOnly">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="overwriteMode">
      <bool>true</bool>
@@ -89,7 +125,7 @@
      </rect>
     </property>
     <property name="readOnly">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
     <property name="overwriteMode">
      <bool>true</bool>
@@ -108,17 +144,20 @@
      <string>Start</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="logsButton">
+   <widget class="QPushButton" name="helpButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>380</x>
       <y>520</y>
       <width>101</width>
       <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Logi</string>
+     <string>Help</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="excelSheets">
@@ -153,8 +192,21 @@
        <string>2G</string>
       </property>
      </item>
+     <item>
+      <property name="text">
+       <string>3G</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>AT&amp;T</string>
+      </property>
+     </item>
     </widget>
-    <widget class="QTextBrowser" name="textBrowser">
+    <widget class="QTextBrowser" name="resultColumn">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -165,6 +217,9 @@
      </property>
     </widget>
     <widget class="QTextBrowser" name="textBrowser_2">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -175,6 +230,9 @@
      </property>
     </widget>
     <widget class="QTextBrowser" name="textBrowser_3">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -284,10 +342,15 @@
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>80</y>
-       <width>111</width>
-       <height>20</height>
+       <y>70</y>
+       <width>121</width>
+       <height>31</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
      </property>
      <property name="text">
       <string/>
@@ -307,16 +370,6 @@
      </property>
     </widget>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>867</width>
-     <height>21</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionZamknij">
