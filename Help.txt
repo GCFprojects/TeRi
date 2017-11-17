@@ -1,3 +1,0 @@
-			TeRI - Test Results Import Tool
-
-TeRI is a tool to importing results from CMW-500 to excel sheet. 
