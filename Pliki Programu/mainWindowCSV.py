@@ -1,0 +1,147 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'MainWindowCSV.ui'
+#
+# Created by: PyQt4 UI code generator 4.11.4
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt4 import QtCore, QtGui
+
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
+
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
+        MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        MainWindow.setEnabled(True)
+        MainWindow.resize(867, 578)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setMinimumSize(QtCore.QSize(867, 578))
+        MainWindow.setMaximumSize(QtCore.QSize(867, 578))
+        MainWindow.setSizeIncrement(QtCore.QSize(0, 0))
+        self.centralwidget = QtGui.QWidget(MainWindow)
+        self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
+        self.resultWindow = QtGui.QTextEdit(self.centralwidget)
+        self.resultWindow.setEnabled(True)
+        self.resultWindow.setGeometry(QtCore.QRect(10, 10, 601, 391))
+        self.resultWindow.setStyleSheet(_fromUtf8(""))
+        self.resultWindow.setObjectName(_fromUtf8("resultWindow"))
+        self.button_close = QtGui.QPushButton(self.centralwidget)
+        self.button_close.setGeometry(QtCore.QRect(500, 520, 101, 31))
+        self.button_close.setObjectName(_fromUtf8("button_close"))
+        self.browse_txt_button = QtGui.QPushButton(self.centralwidget)
+        self.browse_txt_button.setGeometry(QtCore.QRect(500, 420, 101, 31))
+        self.browse_txt_button.setObjectName(_fromUtf8("browse_txt_button"))
+        self.browse_xls_button = QtGui.QPushButton(self.centralwidget)
+        self.browse_xls_button.setGeometry(QtCore.QRect(500, 470, 101, 31))
+        self.browse_xls_button.setObjectName(_fromUtf8("browse_xls_button"))
+        self.path_txt_window = QtGui.QTextEdit(self.centralwidget)
+        self.path_txt_window.setEnabled(True)
+        self.path_txt_window.setGeometry(QtCore.QRect(10, 420, 471, 31))
+        self.path_txt_window.setReadOnly(False)
+        self.path_txt_window.setOverwriteMode(True)
+        self.path_txt_window.setObjectName(_fromUtf8("path_txt_window"))
+        self.path_xls_window = QtGui.QTextEdit(self.centralwidget)
+        self.path_xls_window.setGeometry(QtCore.QRect(10, 470, 471, 31))
+        self.path_xls_window.setReadOnly(False)
+        self.path_xls_window.setOverwriteMode(True)
+        self.path_xls_window.setObjectName(_fromUtf8("path_xls_window"))
+        self.startButton = QtGui.QPushButton(self.centralwidget)
+        self.startButton.setGeometry(QtCore.QRect(10, 520, 101, 31))
+        self.startButton.setObjectName(_fromUtf8("startButton"))
+        self.excelSheets = QtGui.QGroupBox(self.centralwidget)
+        self.excelSheets.setGeometry(QtCore.QRect(620, 10, 241, 61))
+        self.excelSheets.setFlat(False)
+        self.excelSheets.setCheckable(False)
+        self.excelSheets.setObjectName(_fromUtf8("excelSheets"))
+        self.comboBox = QtGui.QComboBox(self.excelSheets)
+        self.comboBox.setGeometry(QtCore.QRect(30, 20, 171, 22))
+        self.comboBox.setObjectName(_fromUtf8("comboBox"))
+        self.comboBox.addItem(_fromUtf8(""))
+        self.testRunType = QtGui.QGroupBox(self.centralwidget)
+        self.testRunType.setGeometry(QtCore.QRect(620, 80, 241, 121))
+        self.testRunType.setObjectName(_fromUtf8("testRunType"))
+        self.automaticTestRun = QtGui.QRadioButton(self.testRunType)
+        self.automaticTestRun.setGeometry(QtCore.QRect(20, 20, 82, 17))
+        self.automaticTestRun.setChecked(True)
+        self.automaticTestRun.setObjectName(_fromUtf8("automaticTestRun"))
+        self.manualTestRun = QtGui.QRadioButton(self.testRunType)
+        self.manualTestRun.setGeometry(QtCore.QRect(20, 50, 82, 17))
+        self.manualTestRun.setChecked(False)
+        self.manualTestRun.setObjectName(_fromUtf8("manualTestRun"))
+        self.moduleNumber = QtGui.QLineEdit(self.testRunType)
+        self.moduleNumber.setGeometry(QtCore.QRect(110, 70, 121, 31))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.moduleNumber.setFont(font)
+        self.moduleNumber.setText(_fromUtf8(""))
+        self.moduleNumber.setObjectName(_fromUtf8("moduleNumber"))
+        self.label_4 = QtGui.QLabel(self.testRunType)
+        self.label_4.setGeometry(QtCore.QRect(30, 78, 81, 16))
+        self.label_4.setObjectName(_fromUtf8("label_4"))
+        self.groupBox = QtGui.QGroupBox(self.centralwidget)
+        self.groupBox.setGeometry(QtCore.QRect(620, 210, 241, 111))
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        self.groupBox.setFont(font)
+        self.groupBox.setObjectName(_fromUtf8("groupBox"))
+        self.pushButtonCSVCreate = QtGui.QPushButton(self.groupBox)
+        self.pushButtonCSVCreate.setGeometry(QtCore.QRect(140, 70, 91, 31))
+        self.pushButtonCSVCreate.setObjectName(_fromUtf8("pushButtonCSVCreate"))
+        self.labelCSVUser = QtGui.QLabel(self.groupBox)
+        self.labelCSVUser.setGeometry(QtCore.QRect(10, 35, 51, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.labelCSVUser.setFont(font)
+        self.labelCSVUser.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelCSVUser.setObjectName(_fromUtf8("labelCSVUser"))
+        self.lineEditCSVUser = QtGui.QLineEdit(self.groupBox)
+        self.lineEditCSVUser.setGeometry(QtCore.QRect(60, 30, 171, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        self.lineEditCSVUser.setFont(font)
+        self.lineEditCSVUser.setObjectName(_fromUtf8("lineEditCSVUser"))
+        MainWindow.setCentralWidget(self.centralwidget)
+        self.statusbar = QtGui.QStatusBar(MainWindow)
+        self.statusbar.setObjectName(_fromUtf8("statusbar"))
+        MainWindow.setStatusBar(self.statusbar)
+        self.actionZamknij = QtGui.QAction(MainWindow)
+        self.actionZamknij.setObjectName(_fromUtf8("actionZamknij"))
+
+        self.retranslateUi(MainWindow)
+        QtCore.QObject.connect(self.button_close, QtCore.SIGNAL(_fromUtf8("clicked()")), MainWindow.close)
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+    def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(_translate("MainWindow", "TeRI", None))
+        self.button_close.setText(_translate("MainWindow", "Zamknij", None))
+        self.browse_txt_button.setText(_translate("MainWindow", "Browse", None))
+        self.browse_xls_button.setText(_translate("MainWindow", "Browse", None))
+        self.startButton.setText(_translate("MainWindow", "Start", None))
+        self.excelSheets.setTitle(_translate("MainWindow", "Excel", None))
+        self.comboBox.setItemText(0, _translate("MainWindow", "None", None))
+        self.testRunType.setTitle(_translate("MainWindow", "Results", None))
+        self.automaticTestRun.setText(_translate("MainWindow", "Automatic", None))
+        self.manualTestRun.setText(_translate("MainWindow", "Manual", None))
+        self.label_4.setText(_translate("MainWindow", "Module name:", None))
+        self.groupBox.setTitle(_translate("MainWindow", "CSV for import results to WebImax", None))
+        self.pushButtonCSVCreate.setText(_translate("MainWindow", "Create", None))
+        self.labelCSVUser.setText(_translate("MainWindow", "User:", None))
+        self.actionZamknij.setText(_translate("MainWindow", "Zamknij", None))
+
