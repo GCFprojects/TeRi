@@ -1,0 +1,28 @@
+			TeRI - Test Results Import Tool
+
+TeRI is a tool to import results from CMW-500 to excel sheet.
+
+Step 1:
+Below you have two path browsers. 
+In first path browser you should enter path to file with .txt or .csv file extension.
+In secound path browser you should enter path to excel file with .xls file extension.
+
+Step 2:
+In sub window "Excel" from the drop down panel select name the worksheet where results you want put.
+
+Step 3:
+In sub window "Results" select what type of results you want put and enter module name.
+
+Step 4:
+Press Start
+
+Tip: TeRI may enter in "Not Responding" mode. It is normal state. Wait few min for popup window with information about finish.
+
+Results you will find on desctop in "TeRI_Results" folder. 
+
+Step 5:
+Copy column with results and paste to original excel.
+
+Tip: TeRI creating a copy of excel, because of the need to use the old version of the excel document. 
+During creating copy of a document, the macros and formulas are deleted.
+Formulas will be added in the future but macros is not posible to add in copy of excel.
