@@ -76,7 +76,7 @@ def writeToFile(tab, excelResult=None, param=None):
         warning.write('\n')
         warning.close()
 
-        fail = open(dir_path + '\\Fails_to _user_veryfication.txt', 'w+', encoding='utf-8')
+        fail = open(dir_path + '\\Fails_to_user_veryfication.txt', 'w+', encoding='utf-8')
         for item in tab:
             fail.write('{0}, '.format(item))
         fail.write('\n')
@@ -88,7 +88,7 @@ def writeToFile(tab, excelResult=None, param=None):
             TC_added.write('{0}, '.format(item))
         TC_added.write('\n')
         TC_added.close()
-# Usówanie list, które posiadają puste pole rezultatów
+# Usuwanie list, które posiadają puste pole rezultatów
 def deleteListsWithoutResults(tcList):
     tab = [item for item in tcList if item[2] == '']
     if len(tab) > 0:
@@ -140,7 +140,6 @@ def findDublicateTC(tab):
         writeToFile(item, param='Result')
     for item in resultFailList:
         writeToFile(item, param='Fail')
-
 
 def checkResults(paramList):
     resultFail = [x for x in paramList if
