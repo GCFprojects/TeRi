@@ -1,9 +1,11 @@
 import csv
 import os
 import datetime
-from xlrd import open_workbook
+import xlrd
 
 from PyQt4 import QtCore
+
+resultIRTW = 'None'
 
 
 class ImportResultsToCSV(QtCore.QThread):
@@ -12,7 +14,7 @@ class ImportResultsToCSV(QtCore.QThread):
         super(ImportResultsToCSV, self).__init__(parent)
         self.responsible = responsible
         self.excel_sheet_name = excel_sheet_name
-        self.work_book = open_workbook(path_xls_file)
+        self.work_book = xlrd.open_workbook(path_xls_file)
         self.work_sheet = self.work_book.sheet_by_name(excel_sheet_name)
         self.user_path()
 
@@ -22,8 +24,6 @@ class ImportResultsToCSV(QtCore.QThread):
     def user_path(self):
         self.userdir = os.path.expanduser('~') + '\\Desktop\\TeRI_Results\\' + str(datetime.date.today()) \
                        + '\\CSV_WebImax'
-
-        print(self.userdir)
 
         if not os.path.exists(self.userdir):
             os.makedirs(self.userdir)
@@ -80,7 +80,7 @@ class ImportResultsToCSV(QtCore.QThread):
                             )
                         else:
                             if len(item_list) == 1:
-                                self.check_and_format_single_tc(excel_tc=item_list)
+                                self.check_and_format_single_tc(excel_tc=item_list[0])
 
                             elif len(item_list) > 1:
                                 self.check_tc_list(tc_list=item_list)
@@ -89,10 +89,11 @@ class ImportResultsToCSV(QtCore.QThread):
                     # Jeżeli długość item_list jest 1 przekazujemy listę do funkcji w celu formatowania i zapisujemy
                     # do list_to_write_to_cvs
                     if len(item_list) == 1:
-                        self.check_and_format_single_tc(excel_tc=item_list)
+                        self.check_and_format_single_tc(excel_tc=item_list[0])
 
                     elif len(item_list) > 1:
                         self.check_tc_list(tc_list=item_list)
+        self.check_time()
         self.write_to_csv()
 
     def check_tc_list(self, tc_list):
@@ -109,7 +110,7 @@ class ImportResultsToCSV(QtCore.QThread):
                 tc_list.remove(item)
 
         if len(tc_list) == 1:
-            self.check_and_format_single_tc(excel_tc=tc_list)
+            self.check_and_format_single_tc(excel_tc=tc_list[0])
         elif len(tc_list) > 1:
             self.check_and_format_tc_list(tc_list=tc_list)
 
@@ -131,69 +132,126 @@ class ImportResultsToCSV(QtCore.QThread):
         na_list = [x for x in tc_list if x[2] == 'N/A']
 
         if len(pass_list) == len(tc_list):
-            self.list_to_write_to_csv.append(tc_list[0])
+            self.check_and_format_single_tc(tc_list[0])
         elif len(fail_list) == len(tc_list):
-            self.list_to_write_to_csv.append(tc_list[0])
+            self.check_and_format_single_tc(tc_list[0])
+        elif len(na_list) == len(tc_list):
+            pass
         elif (len(pass_list) + len(fail_list)) == len(tc_list):
-            self.list_to_write_to_csv.append(fail_list[0])
+            self.check_and_format_single_tc(fail_list[0])
         elif (len(pass_list) + len(na_list)) == len(tc_list):
-            self.list_to_write_to_csv.append(pass_list[0])
+            self.check_and_format_single_tc(pass_list[0])
         elif (len(fail_list) + len(na_list)) == len(tc_list):
-            self.list_to_write_to_csv.append(fail_list[0])
+            self.check_and_format_single_tc(fail_list[0])
         elif (len(pass_list) + len(fail_list) + len(na_list)) == len(tc_list):
-            self.list_to_write_to_csv.append(fail_list[0])
+            self.check_and_format_single_tc(fail_list[0])
 
     def check_and_format_single_tc(self, excel_tc):
         package = list(self.package_list.keys())
         package.sort()
 
-        if excel_tc[0][0] >= self.package_list[package[0]] and excel_tc[0][0] <= self.package_list['KC_End']:
-            for index, element in enumerate(excel_tc[0]):
+        if excel_tc[0] >= self.package_list[package[0]] and excel_tc[0] <= self.package_list['KC_End']:
+            for index, element in enumerate(excel_tc):
                 if type(element) is str:
-                    excel_tc[0][index] = '_'.join(element.split())
+                    excel_tc[index] = '_'.join(element.split())
 
             for index, element in enumerate(package):
                 try:
-                    if (excel_tc[0][0] > self.package_list[element]) and \
-                            (excel_tc[0][0] < self.package_list[package[index + 1]]):
-                        excel_tc[0][1] = excel_tc[0][1] + '_' + element
+                    if (excel_tc[0] > self.package_list[element]) and \
+                            (excel_tc[0]< self.package_list[package[index + 1]]):
+                        excel_tc[1] = excel_tc[1] + '_' + element
                         break
                 except IndexError:
-                    if excel_tc[0][0] > self.package_list[package[-1]] and element == package[-1]:
+                    if excel_tc[0] > self.package_list[package[-1]] and element == package[-1]:
                         pass
 
-        if excel_tc[0][2] == 'P':
-            excel_tc[0][2] = 'passed'
-            self.list_to_write_to_csv.append(excel_tc[0])
-        elif excel_tc[0][2] == 'F':
-            excel_tc[0][2] = 'failed'
-            self.list_to_write_to_csv.append(excel_tc[0])
-            self.write_to_file(paramiter='Fail', tc=excel_tc[0])
-        elif excel_tc[0][2] == 'N/A':
-            self.write_to_file(paramiter='N/A', tc=excel_tc[0])
-        elif excel_tc[0][2] == '':
-            self.write_to_file(paramiter='Null', tc=excel_tc[0])
+        if excel_tc[2] == 'P':
+            excel_tc[2] = 'passed'
+            self.list_to_write_to_csv.append(excel_tc)
+        elif excel_tc[2] == 'F':
+            excel_tc[2] = 'failed'
+            self.list_to_write_to_csv.append(excel_tc)
+            self.write_to_file(paramiter='Fail', tc=excel_tc)
+        elif excel_tc[2] == 'N/A':
+            self.write_to_file(paramiter='N/A', tc=excel_tc)
+        elif excel_tc[2] == '':
+            self.write_to_file(paramiter='Null', tc=excel_tc)
             pass  # write to investigation log
 
     def write_to_file(self, paramiter, tc):
+        """
+        Funkcja mająca za zadanie na podstawie parametru wpisać do odpowiedniego pliku logów zawartości zmiennej tc
+        :param paramiter:
+        :param tc:
+        :return:
+        """
         if paramiter == 'N/A':
-            log_file = open(self.userdir + '\\NA_results.txt', 'a', encoding='utf-8')
-            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
+            log_file = open(self.userdir + '\\NA_results_' + self.excel_sheet_name + '.txt', 'a', encoding='utf-8')
+            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6} {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
                                                                            tc[6], tc[7], '\n'))
             log_file.close()
 
         elif paramiter == 'Null':
-            log_file = open(self.userdir + '\\TC_without_result.txt', 'a', encoding='utf-8')
-            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
+            log_file = open(self.userdir + '\\TC_without_result_' + self.excel_sheet_name + '.txt', 'a', encoding='utf-8')
+            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6} {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
                                                                            tc[6], tc[7], '\n'))
             log_file.close()
 
         elif paramiter == 'Fail':
-            log_file = open(self.userdir + '\\TC_with_FAIL_result.txt', 'a', encoding='utf-8')
-            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
+            if type(tc[4]) is float:
+                tc[4] = self.change_time_represation(tc[4])
+            log_file = open(self.userdir + '\\TC_with_FAIL_result_' + self.excel_sheet_name + '.txt', 'a', encoding='utf-8')
+            log_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6} {7}'.format(tc[1], tc[2], tc[3], tc[4], tc[5],
                                                                            tc[6], tc[7], '\n'))
             log_file.close()
 
     def write_to_csv(self):
+        """
+        Tworzenie i wpisywanie do pliku CSV wszystkich list z self.list_to_write_to_csv.
+        :return:
+        """
+        out = open(self.userdir + '\\CSV_Import_To_WebImax_' + self.excel_sheet_name + '.csv', 'w')
+        for row in self.list_to_write_to_csv:
+            row.remove(row[0])
+            for column in row:
+                out.write('{0};'.format(column))
+            out.write('\n')
+        out.close()
 
-        pass
+    def check_time(self):
+        """
+        This function check all records in list_to_write_to_csv.
+        Excel przechowuje komórki w formacie time oraz data jako liczby typu float.
+        W celu poprawnego wyświetlania czasu w pliku csv wymagane jest odpowiednie przekształcenie. Wykonuje to funkcja xlrd.xldate_as_tuple
+        Zwracana jest tulpa (0, 0, 0, 0, 0, 0). Ostatnie 3 są odpowiedzialne za czas H, M, S.
+
+        :return:
+        """
+        for item in self.list_to_write_to_csv:
+            if type(item[4]) is float:
+                a = xlrd.xldate_as_tuple(item[4], self.work_book.datemode)
+                item[4] = str(a[3])+str(':')
+                if a[4] < 9 and a[4] >= 0:
+                    item[4] += ('0' + str(a[4]) + ':')
+                else:
+                    item[4] += (str(a[4]) + ':')
+
+                if a[5] < 9 and a[5] >= 0:
+                    item[4] += ('0' + str(a[5]))
+                else:
+                    item[4] += (str(a[5]))
+
+    def change_time_represation(self, time):
+        a = xlrd.xldate_as_tuple(time, self.work_book.datemode)
+        time = str(a[3])+str(':')
+        if a[4] < 9 and a[4] >= 0:
+            time += ('0' + str(a[4]) + ':')
+        else:
+            time += (str(a[4]) + ':')
+
+        if a[5] < 9 and a[5] >= 0:
+            time += ('0' + str(a[5]))
+        else:
+            time += (str(a[5]))
+
+        return time
