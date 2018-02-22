@@ -1,9 +1,9 @@
 import os
 import sys
 import xlrd
-from xlutils.copy import copy
+import time
+from PyQt4 import Qt
 from PyQt4 import QtGui, QtCore
-
 from mainWindowCSV import Ui_MainWindow
 from os.path import isfile
 from ct import start
@@ -18,13 +18,14 @@ class StartQT4(QtGui.QMainWindow):
         # QtGui.QWidget.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.pathTxtFile = ''
+        self.pathXlsFile = ''
         # Ustawienie help
         help_file = open('Help.txt').read()
         self.ui.resultWindow.setText(help_file)
         # Ustawienie wartosci poczatkowej dla okien browser`ow
         self.ui.path_txt_window.setText("Browse path to the txt or csv file. Path to results from CMW-500")
         self.ui.path_xls_window.setText("Browse path to the xls file. Path to Excel file where you want put results")
-        self.ui.moduleNumber.setText("Z15")
 
         # Wlasne polaczenia slotow
         QtCore.QObject.connect(self.ui.browse_txt_button, QtCore.SIGNAL("clicked()"), self.browse_txt_file)
@@ -36,14 +37,13 @@ class StartQT4(QtGui.QMainWindow):
     # Wyszukiwarka plików txt i csv
     def browse_txt_file(self):
         browserTxt = QtGui.QFileDialog(self)
-        self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\PLAS9_W_200_068 TeRI test\\2G\\KC201-207')
+        self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop')
         if isfile(self.filename):
             plikTxt = open(self.filename)
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
-                # self.ui.path_xml_window.setText(os.path.basename(plikTxt.name))
-                self.ui.path_txt_window.setText(plikTxt.name)
-                global pathTxtFile
-                pathTxtFile = plikTxt.name
+                self.ui.path_txt_window.setText(os.path.basename(plikTxt.name))
+                # self.ui.path_txt_window.setText(plikTxt.name)
+                self.pathTxtFile = plikTxt.name
                 return plikTxt.name
             else:
                 self.showDialog(0)
@@ -51,14 +51,13 @@ class StartQT4(QtGui.QMainWindow):
     # Wyszukiwarka plików xls
     def browse_xls_file(self):
         browserXls = QtGui.QFileDialog(self)
-        self.filename = browserXls.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\Zurich')
+        self.filename = browserXls.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop')
         if isfile(self.filename):
             plikXls = open(self.filename)
             if os.path.basename(plikXls.name)[-4:] == '.xls':
-                # self.ui.path_xml_window.setText(os.path.basename(plikXml.name))
-                self.ui.path_xls_window.setText(plikXls.name)
-                global pathXlsFile
-                pathXlsFile = plikXls.name
+                self.ui.path_xls_window.setText(os.path.basename(plikXls.name))
+                # self.ui.path_xls_window.setText(plikXls.name)
+                self.pathXlsFile = plikXls.name
                 self.update_combobox()
                 return plikXls.name
             else:
@@ -66,7 +65,7 @@ class StartQT4(QtGui.QMainWindow):
 
     #
     def update_combobox(self):
-        wb=xlrd.open_workbook(pathXlsFile)
+        wb=xlrd.open_workbook(self.pathXlsFile)
         sheet = wb.sheet_names()
         self.ui.comboBox.clear()
         self.ui.comboBox.addItems(list(sheet))
@@ -75,36 +74,53 @@ class StartQT4(QtGui.QMainWindow):
     def showDialog(self, button=None):
         msg = QtGui.QMessageBox()
         msg.setText("Information:")
+
         if button == 0:
-            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .txt lub .csv")
+            msg.setInformativeText("You have selected a file with an incorrect extension.\nChoose an .txt or .csv")
             msg.setIcon(QtGui.QMessageBox.Warning)
             msg.setWindowTitle("Notification")
             msg.setStandardButtons(QtGui.QMessageBox.Ok)
+
         elif button == 1:
-            msg.setInformativeText("Wybrałeś plik o niepoprawnym rozszeżeniu.\nWybierz plik .xls")
+            msg.setInformativeText("You have selected a file with an incorrect extension.\nChoose an .xls file")
             msg.setIcon(QtGui.QMessageBox.Warning)
             msg.setWindowTitle("Notification")
             msg.setStandardButtons(QtGui.QMessageBox.Ok)
+
         elif button == 2:
-            msg.setInformativeText("Nieprowidłowa ścieżka dostępowa do plików.\nSprawdź czy podałeś poprawną ścieżkę i spróbuj ponownie")
+            msg.setInformativeText("Path to the files have some issue.\nCheck if you properly added both path "
+                                   "to CMW-500 result file and excel sheet.")
             msg.setIcon(QtGui.QMessageBox.Warning)
-            msg.setWindowTitle("Notification")
+            msg.setWindowTitle("Warning !!!")
             msg.setStandardButtons(QtGui.QMessageBox.Ok)
+
         elif button == 3:
             msg.setIcon(QtGui.QMessageBox.Information)
-            msg.setWindowTitle("SUCCEC SUCCES !!!")
-            msg.setInformativeText("Copy results from CMW-500 file to excel was finished with SUCCES !!!\n Great Job mate :)")
+            msg.setWindowTitle("SUCCESS SUCCESS !!!")
+            msg.setInformativeText("Copy results from CMW-500 file to excel was finished successfully !!!\n"
+                                   "Great Job mate :)")
         elif button == 4:
             msg.setWindowTitle("Information:")
             msg.setIcon(QtGui.QMessageBox.Question)
             msg.setWindowTitle("Module Number")
             msg.setInformativeText("Do you want to enter results without specifying module number ?")
             msg.setStandardButtons(QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+
         elif button == 5:
-            msg.setInformativeText("You have an open excel file to whitch you want to enter the results.\nClose excel file and then press \"Start\" again.")
+            msg.setInformativeText("You have an open excel file to whitch you want to enter the results.\n"
+                                   "Close excel file and then press \"Start\" again.")
             msg.setIcon(QtGui.QMessageBox.Warning)
             msg.setWindowTitle("Warning !!!")
             msg.setStandardButtons(QtGui.QMessageBox.Ok)
+
+        elif button == 6:
+            msg.setIcon(QtGui.QMessageBox.Information)
+            msg.setWindowTitle("SUCCEC SUCCES !!!")
+            msg.setInformativeText("Creating csv file to import results to WebImax was finished successfully !!!\n"
+                                   "Great Job mate :)")
+
+        # elif button == 7:
+        #     msg.setWindowTitle()
 
         result = msg.exec_()
 
@@ -115,8 +131,9 @@ class StartQT4(QtGui.QMainWindow):
 
 
     def startProcess(self):
-        if pathTxtFile != '' and pathXlsFile != '':
-            logPatch = start(pathTxtFile)
+
+        if self.pathTxtFile != '' and self.pathXlsFile != '':
+            logPatch = start(self.pathTxtFile)
             excelSheetName = str(self.ui.comboBox.currentText())
             if self.ui.automaticTestRun.isChecked():
                 testRunType = 'Automatic'
@@ -125,7 +142,7 @@ class StartQT4(QtGui.QMainWindow):
 
             if self.ui.moduleNumber.text() != '':
                 moduleNumber = self.moduleFormat()
-                result = searchTcInExcel(pathXlsFile=pathXlsFile, logPatch=logPatch, testRunType=testRunType,
+                result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch, testRunType=testRunType,
                                     moduleNumber=moduleNumber, excelSheetName=excelSheetName)
                 if result == 'Done':
                     self.showDialog(3)
@@ -134,11 +151,10 @@ class StartQT4(QtGui.QMainWindow):
             else:
                 if self.showDialog(4) == 'Yes':
                     moduleNumber = ''
-                    result = searchTcInExcel(pathXlsFile=pathXlsFile, logPatch=logPatch, testRunType=testRunType,
+                    result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch, testRunType=testRunType,
                                         moduleNumber=moduleNumber, excelSheetName=excelSheetName)
                     if result == 'Done':
                         self.showDialog(3)
-
         else:
             self.showDialog(2)
 
@@ -146,9 +162,9 @@ class StartQT4(QtGui.QMainWindow):
     def moduleFormat(self):
         moduleNumber = (self.ui.moduleNumber.text()).upper()
         if moduleNumber[0].isdigit():
-            print('Nie jest litera')
+            print('There is no letter of the module name at the beginning')
         if not moduleNumber[1:].isdigit():
-            print('Nie jest Liczba')
+            print('No module number')
         return moduleNumber
         # patchXmlFile zmienna globalna z ścieżką do pliku xls
 
@@ -161,12 +177,40 @@ class StartQT4(QtGui.QMainWindow):
 
     def startCreateCsvFile(self):
 
-        responsible = self.ui.lineEditCSVUser.text()
-        excel_sheet_name = str(self.ui.comboBox.currentText())
-        self.importReResultsToCSV = ImportResultsToCSV(responsible=responsible, path_xls_file=pathXlsFile,
-                                                       excel_sheet_name=excel_sheet_name)
-        self.importReResultsToCSV.start()
+        if self.ui.lineEditCSVUser.text() != '':
+            responsible = self.ui.lineEditCSVUser.text()
+            if self.pathXlsFile != '':
+                if self.ui.comboBox.currentText() == '2G' or self.ui.comboBox.currentText() == '3G':
+                    excel_sheet_name = str(self.ui.comboBox.currentText())
+                    self.importResultsToCSV = ImportResultsToCSV(responsible=responsible,
+                                                                 path_xls_file=self.pathXlsFile,
+                                                                 excel_sheet_name=excel_sheet_name)
+                    self.importResultsToCSV.start()
+                else:
+                    QtGui.QMessageBox.warning(self, 'Warning',
+                                              'TeRI currently supports import to WebImax only for 2G/3G')
+            else:
+                QtGui.QMessageBox.warning(self, 'Error !!!', 'Browse path to excel sheet with results.\n'
+                                                             'It is requaierd to creating csv file.')
+        else:
+            responsible = ''
+            while responsible == '':
+                responsible, ok = QtGui.QInputDialog.getText(self, 'Responsibility', 'Enter your login to WebImax:')
+                if not ok:
+                    QtGui.QMessageBox.warning(self, 'Erorr !!!', 'Login to WebImax is required !!!')
+                if ok:
+                    self.ui.lineEditCSVUser.setText(responsible)
 
+        try:
+            QtGui.QMessageBox.information(self, 'Wait!', 'Work in Progress')
+            while self.importResultsToCSV.isRunning():
+                time.sleep(1)
+            else:
+                QtGui.QMessageBox.information(self, 'SUCCEC SUCCES !!!', 'Creating csv file to import results to '
+                                                                        'WebImax was finished successfully !!!\n'
+                                                                        'Great Job mate :)')
+        except AttributeError:
+            pass
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
