@@ -23,6 +23,9 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
+    def __init__(self):
+        self.comboData=['None']
+
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
         MainWindow.setEnabled(True)
@@ -65,10 +68,10 @@ class Ui_MainWindow(object):
         self.startButton = QtGui.QPushButton(self.centralwidget)
         self.startButton.setGeometry(QtCore.QRect(10, 520, 101, 31))
         self.startButton.setObjectName(_fromUtf8("startButton"))
-        self.helpButton = QtGui.QPushButton(self.centralwidget)
-        self.helpButton.setEnabled(True)
-        self.helpButton.setGeometry(QtCore.QRect(380, 520, 101, 31))
-        self.helpButton.setObjectName(_fromUtf8("helpButton"))
+        # self.helpButton = QtGui.QPushButton(self.centralwidget)
+        # self.helpButton.setEnabled(True)
+        # self.helpButton.setGeometry(QtCore.QRect(380, 520, 101, 31))
+        # self.helpButton.setObjectName(_fromUtf8("helpButton"))
         self.excelSheets = QtGui.QGroupBox(self.centralwidget)
         self.excelSheets.setGeometry(QtCore.QRect(620, 10, 241, 211))
         self.excelSheets.setFlat(False)
@@ -77,9 +80,7 @@ class Ui_MainWindow(object):
         self.comboBox = QtGui.QComboBox(self.excelSheets)
         self.comboBox.setGeometry(QtCore.QRect(30, 20, 171, 22))
         self.comboBox.setObjectName(_fromUtf8("comboBox"))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
+        self.comboBox.addItems(self.comboData)
         self.resultColumn = QtGui.QTextBrowser(self.excelSheets)
         self.resultColumn.setEnabled(False)
         self.resultColumn.setGeometry(QtCore.QRect(100, 50, 131, 31))
@@ -139,21 +140,18 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "TeRI", None))
-        self.button_close.setText(_translate("MainWindow", "Zamknij", None))
+        self.button_close.setText(_translate("MainWindow", "Close", None))
         self.browse_txt_button.setText(_translate("MainWindow", "Browse", None))
         self.browse_xml_button.setText(_translate("MainWindow", "Browse", None))
         self.startButton.setText(_translate("MainWindow", "Start", None))
-        self.helpButton.setText(_translate("MainWindow", "Help", None))
-        self.excelSheets.setTitle(_translate("MainWindow", "Wybierz zakładkę z excel`a", None))
-        self.comboBox.setItemText(0, _translate("MainWindow", "2G", None))
-        self.comboBox.setItemText(1, _translate("MainWindow", "3G", None))
-        self.comboBox.setItemText(2, _translate("MainWindow", "AT&T", None))
-        self.label.setText(_translate("MainWindow", "Wynik:", None))
-        self.label_2.setText(_translate("MainWindow", "Czas:", None))
-        self.label_3.setText(_translate("MainWindow", "Moduł: ", None))
-        self.testRunType.setTitle(_translate("MainWindow", "Wyniki", None))
+        # self.helpButton.setText(_translate("MainWindow", "Help", None))
+        self.excelSheets.setTitle(_translate("MainWindow", "Excel", None))
+        self.comboBox.setItemText(0, _translate("MainWindow", "None", None))
+        self.label.setText(_translate("MainWindow", "Result:", None))
+        self.label_2.setText(_translate("MainWindow", "Time:", None))
+        self.label_3.setText(_translate("MainWindow", "Module: ", None))
+        self.testRunType.setTitle(_translate("MainWindow", "Results", None))
         self.automaticTestRun.setText(_translate("MainWindow", "Automatic", None))
         self.manualTestRun.setText(_translate("MainWindow", "Manual", None))
-        self.label_4.setText(_translate("MainWindow", "Podaj nr. modułu:", None))
-        self.actionZamknij.setText(_translate("MainWindow", "Zamknij", None))
-
+        self.label_4.setText(_translate("MainWindow", "Module name:", None))
+        self.actionZamknij.setText(_translate("MainWindow", "Close", None))
