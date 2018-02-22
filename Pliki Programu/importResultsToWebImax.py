@@ -5,9 +5,6 @@ import xlrd
 
 from PyQt4 import QtCore
 
-resultIRTW = 'None'
-
-
 class ImportResultsToCSV(QtCore.QThread):
 
     def __init__(self, responsible, path_xls_file, excel_sheet_name, parent=None):
