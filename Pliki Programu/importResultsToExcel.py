@@ -1,6 +1,5 @@
-import os, sys
+import os
 import xlrd
-import xlwt
 import datetime
 from xlutils.copy import copy
 from xlwt import easyxf
@@ -21,9 +20,9 @@ def readTxtResultsFile(logPatch):
 
     return resultTab
 
-def searchTcInExcel(pathXlsFile, logPatch, testRunType, moduleNumber, excelSheetName):
+def searchTcInExcel(pathXlsFile, logPatch, testRunType, moduleNumber, excelSheetName, location):
     resultTab = readTxtResultsFile(logPatch=logPatch)
-    location = checkLocation(excelSheetName)
+    # location = checkLocation(excelSheetName)
     excelStyle = excelSheetStyle(testRunType=testRunType)
 
     wb = xlrd.open_workbook(pathXlsFile, formatting_info=True, on_demand=True)
@@ -227,11 +226,11 @@ def searchTcInExcel(pathXlsFile, logPatch, testRunType, moduleNumber, excelSheet
 #         rb_sheet.write(cellNumber['TC'] + 9, 9, xlwt.Formula('SUM(J' + str(TC['KC427'] + 2) + ':J' + str(TC['KC429']) + ')'), styleTimeCell) # WCDMA R8 CSVoH
 #         rb_sheet.write(cellNumber['TC'] + 10, 9, xlwt.Formula('SUM(J' + str(TC['KC429'] + 2) + ':J' + str(TC['KC433']) + ')'), styleTimeCell) # WCDMA R8 Fast Dormancy
 
-def checkLocation(excelSheetName):
-    if excelSheetName == '2G':
-        return 'WRO2'
-    elif excelSheetName == '3G':
-        return 'WRO1'
+# def checkLocation(excelSheetName):
+#     if excelSheetName == '2G':
+#         return 'WRO2'
+#     elif excelSheetName == '3G':
+#         return 'WRO1'
 
 def excelSheetStyle(testRunType):
     if testRunType == 'Automatic':
@@ -248,7 +247,10 @@ def excelSheetStyle(testRunType):
 
 def writeToExcel(rb_sheet, item, tcList, moduleNumber, excelStyle, location):
     rb_sheet.write(item, 8, tcList[2][0], excelStyle[0])
-    rb_sheet.write(item, 9, tcList[4][1:], excelStyle[1])
+    if tcList[4][:1] == 0:
+        rb_sheet.write(item, 9, tcList[4][1:], excelStyle[1])
+    else:
+        rb_sheet.write(item, 9, tcList[4], excelStyle[1])
     rb_sheet.write(item, 10, moduleNumber, excelStyle[2])
     rb_sheet.write(item, 14, tcList[8], excelStyle[3])
     rb_sheet.write(item, 16, location, excelStyle[3])

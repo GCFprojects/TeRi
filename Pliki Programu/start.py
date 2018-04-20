@@ -73,7 +73,9 @@ class StartQT4(QtGui.QMainWindow):
     # Popup informujący o błędnym rozszeżeniu pliku
     def showDialog(self, button=None):
         msg = QtGui.QMessageBox()
+        msg.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
         msg.setText("Information:")
+        msg.setModal(True)
 
         if button == 0:
             msg.setInformativeText("You have selected a file with an incorrect extension.\nChoose an .txt or .csv")
@@ -118,6 +120,11 @@ class StartQT4(QtGui.QMainWindow):
             msg.setWindowTitle("SUCCEC SUCCES !!!")
             msg.setInformativeText("Creating csv file to import results to WebImax was finished successfully !!!\n"
                                    "Great Job mate :)")
+        elif button == 7:
+            msg.setIcon(QtGui.QMessageBox.Warning)
+            msg.setWindowTitle("Warning !!!")
+            msg.setStandardButtons(QtGui.QMessageBox.Ok)
+            msg.setInformativeText('No locations entered. It is required parameter.')
 
         # elif button == 7:
         #     msg.setWindowTitle()
@@ -133,28 +140,36 @@ class StartQT4(QtGui.QMainWindow):
     def startProcess(self):
 
         if self.pathTxtFile != '' and self.pathXlsFile != '':
-            logPatch = start(self.pathTxtFile)
-            excelSheetName = str(self.ui.comboBox.currentText())
-            if self.ui.automaticTestRun.isChecked():
-                testRunType = 'Automatic'
-            elif self.ui.manualTestRun.isChecked():
-                testRunType = 'Manual'
+            if self.ui.comboBoxLoc.currentText() != '':
+                location = str(self.ui.comboBoxLoc.currentText()[:4])
+                logPatch = start(self.pathTxtFile)
+                excelSheetName = str(self.ui.comboBox.currentText())
 
-            if self.ui.moduleNumber.text() != '':
-                moduleNumber = self.moduleFormat()
-                result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch, testRunType=testRunType,
-                                    moduleNumber=moduleNumber, excelSheetName=excelSheetName)
-                if result == 'Done':
-                    self.showDialog(3)
-                elif result == 'Excel':
-                    self.showDialog(5)
-            else:
-                if self.showDialog(4) == 'Yes':
-                    moduleNumber = ''
+                if self.ui.automaticTestRun.isChecked():
+                    testRunType = 'Automatic'
+                elif self.ui.manualTestRun.isChecked():
+                    testRunType = 'Manual'
+
+                if self.ui.moduleNumber.text() != '':
+                    moduleNumber = self.moduleFormat()
                     result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch, testRunType=testRunType,
-                                        moduleNumber=moduleNumber, excelSheetName=excelSheetName)
+                                             moduleNumber=moduleNumber, excelSheetName=excelSheetName,
+                                             location=location)
                     if result == 'Done':
                         self.showDialog(3)
+                    elif result == 'Excel':
+                        self.showDialog(5)
+                else:
+                    if self.showDialog(4) == 'Yes':
+                        moduleNumber = ''
+                        result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch,
+                                                 testRunType=testRunType,
+                                                 moduleNumber=moduleNumber, excelSheetName=excelSheetName)
+                        if result == 'Done':
+                            self.showDialog(3)
+
+            else:
+                self.showDialog(7)
         else:
             self.showDialog(2)
 

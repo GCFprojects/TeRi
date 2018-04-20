@@ -5,7 +5,7 @@ TeRI is a tool to import results from CMW-500 to excel sheet.
 Step 1:
 Below you have two path browsers. 
 In first path browser you should enter path to file with .txt or .csv file extension.
-In secound path browser you should enter path to excel file with .xls file extension.
+In second path browser you should enter path to excel file with .xls file extension.
 
 Step 2:
 In sub window "Excel" from the drop down panel select name the worksheet where results you want put.
