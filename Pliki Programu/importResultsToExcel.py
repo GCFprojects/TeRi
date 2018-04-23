@@ -106,7 +106,7 @@ def searchTcInExcel(pathXlsFile, logPatch, testRunType, moduleNumber, excelSheet
                             # Jeżeli pola parametr są takie same sprawdź czy pole wyniku i czasu jest puste
                             if sheet.cell_value(item+i, 8) == '' and sheet.cell_value(item+i, 9) == '':
                                 # Jeżeli są puste wprowadź wyniki do excel`a
-                                writeToExcel(rb_sheet=rb_sheet, item=item, tcList=tcList,
+                                writeToExcel(rb_sheet=rb_sheet, item=item+i, tcList=tcList,
                                              moduleNumber=moduleNumber, excelStyle=excelStyle, location=location)
 
                             # Jeżeli pola parametr są takie same sprawdź czy pole wyniku i czasu NIE jest puste
@@ -239,7 +239,10 @@ def excelSheetStyle(testRunType):
     elif testRunType == 'Manual':
         styleResultCell = easyxf('font: color green, bold on; borders: left double; align: vert centre, horiz centre')
 
-    styleTimeCell = easyxf('align: vert centre, horiz centre')
+    styleTimeCell = easyxf('align: vert centre, horiz centre', num_format_str='h:mm:ss')
+    # styleTimeCell = XFStyle()
+    # styleTimeCell.alignment.horz = Alignment.HORZ_CENTER
+    # styleTimeCell.num_format_str = 'HH:MM:SS'
     styleTestRunCell = easyxf('align: vert centre, horiz centre; borders: right double')
     styleTestSW_HW = easyxf('align: vert centre, horiz centre; borders: right double, left double')
 
@@ -247,10 +250,7 @@ def excelSheetStyle(testRunType):
 
 def writeToExcel(rb_sheet, item, tcList, moduleNumber, excelStyle, location):
     rb_sheet.write(item, 8, tcList[2][0], excelStyle[0])
-    if tcList[4][:1] == 0:
-        rb_sheet.write(item, 9, tcList[4][1:], excelStyle[1])
-    else:
-        rb_sheet.write(item, 9, tcList[4], excelStyle[1])
+    rb_sheet.write(item, 9, datetime.datetime.strptime(tcList[4], "%H:%M:%S"), excelStyle[1])
     rb_sheet.write(item, 10, moduleNumber, excelStyle[2])
     rb_sheet.write(item, 14, tcList[8], excelStyle[3])
     rb_sheet.write(item, 16, location, excelStyle[3])

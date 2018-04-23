@@ -25,6 +25,7 @@ class StartQT4(QtGui.QMainWindow):
         self.ui.resultWindow.setText(help_file)
         # Ustawienie wartosci poczatkowej dla okien browser`ow
         self.ui.path_txt_window.setText("Browse path to the txt or csv file. Path to results from CMW-500")
+
         self.ui.path_xls_window.setText("Browse path to the xls file. Path to Excel file where you want put results")
 
         # Wlasne polaczenia slotow
@@ -33,6 +34,12 @@ class StartQT4(QtGui.QMainWindow):
         QtCore.QObject.connect(self.ui.startButton, QtCore.SIGNAL("clicked()"), self.startProcess)
         self.ui.pushButtonCSVCreate.clicked.connect(self.startCreateCsvFile)
         # QtCore.QObject.connect(self.ui.helpButton, QtCore.SIGNAL("clicked()"), self.showHelp)
+
+
+        # --------------------------------------------------------------------------
+        # self.ui.moduleNumber.setText('Z10')
+        # self.ui.comboBoxLoc.setCurrentIndex(5)
+
 
     # Wyszukiwarka plików txt i csv
     def browse_txt_file(self):

@@ -63,26 +63,26 @@ def writeToFile(tab, excelResult=None, param=None):
         TC_added.write('In CMW-500: '+str(tab)+'\n\n')
         TC_added.close()
     elif param == 'Test':
-        result = open(dir_path+'\\Results.txt', 'w+', encoding='utf-8')
+        result = open(dir_path+'\\Results.txt', 'a', encoding='utf-8')
         for item in tab:
             result.write('{0}, '.format(item))
         result.write('\n')
         result.close()
 
-        warning = open(dir_path+'\\Warnings.txt', 'w+', encoding='utf-8')
+        warning = open(dir_path+'\\Warnings.txt', 'a', encoding='utf-8')
         warning.write('Duplicate TC with different results !!!\nFollowint TC requires verification by the user.\n\n')
         for item in tab:
             warning.write('{0}, '.format(item))
         warning.write('\n')
         warning.close()
 
-        fail = open(dir_path + '\\Fails_to_user_veryfication.txt', 'w+', encoding='utf-8')
+        fail = open(dir_path + '\\Fails_to_user_veryfication.txt', 'a', encoding='utf-8')
         for item in tab:
             fail.write('{0}, '.format(item))
         fail.write('\n')
         fail.close()
 
-        TC_added = open(dir_path + '\\Results_already_exist_in_excel.txt', 'w+', encoding='utf-8')
+        TC_added = open(dir_path + '\\Results_already_exist_in_excel.txt', 'a', encoding='utf-8')
         TC_added.write('Following results were added in Excel sheet:\n\n')
         for item in tab:
             TC_added.write('{0}, '.format(item))
