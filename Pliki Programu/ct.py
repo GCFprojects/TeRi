@@ -8,11 +8,7 @@ def start(pathTxtFile):
     plikTxt = open(pathTxtFile, encoding='utf-8')
     count = sum(1 for line in open(pathTxtFile))-1
 
-    userdir = os.path.expanduser('~')
-    global dir_path
-    dir_path = userdir + '\\Desktop\\TeRI_Results\\' + str(datetime.date.today())
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
+    checkPathForLogs()
 
     tab = []
     for s in range(count):
@@ -27,6 +23,17 @@ def start(pathTxtFile):
     tab = findDublicateTC(tab)
 
     return dir_path
+
+def checkPathForLogs():
+    userdir = os.path.expanduser('~')
+    global dir_path
+    dir_path = userdir + '\\Desktop\\TeRI_Results\\' + str(datetime.date.today())
+
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+
+
+
 # Formatowanie tekstu. Tworzenie listy, usówanie cudzysłowów. Funkcja zwraca listę
 def primFormat(line):
     tab = []
@@ -39,37 +46,38 @@ def primFormat(line):
     return tab
 # Wpisywanie do plików
 def writeToFile(tab, excelResult=None, param=None):
+
     if param == 'Result':
-        result = open(dir_path + '\\Results.txt', 'a', encoding='utf-8')
+        result = open(dir_path +  '\\Results.txt', 'a', encoding='utf-8')
         for item in tab:
             result.write('{0}, '.format(item))
         result.write('\n')
         result.close()
     elif param == 'Warning':
-        warning = open(dir_path+'\\Warnings.txt', 'a', encoding='utf-8')
+        warning = open(dir_path + '\\Warnings.txt', 'a', encoding='utf-8')
         for item in tab:
             warning.write('{0}, '.format(item))
         warning.write('\n')
         warning.close()
     elif param == 'Fail':
-        fail = open(dir_path+'\\Fails_to_user_veryfication.txt', 'a', encoding='utf-8')
+        fail = open(dir_path + '\\Fails_to_user_veryfication.txt', 'a', encoding='utf-8')
         for item in tab:
             fail.write('{0}, '.format(item))
         fail.write('\n')
         fail.close()
     elif param == 'TC_added':
-        TC_added = open(dir_path+"\\Results_already_exist_in_excel.txt", 'a', encoding='utf-8')
+        TC_added = open(dir_path + '\\Results_already_exist_in_excel.txt', 'a', encoding='utf-8')
         TC_added.write('In excel: '+str(excelResult)+'\n')
         TC_added.write('In CMW-500: '+str(tab)+'\n\n')
         TC_added.close()
     elif param == 'Test':
-        result = open(dir_path+'\\Results.txt', 'a', encoding='utf-8')
+        result = open(dir_path + '\\Results.txt', 'a', encoding='utf-8')
         for item in tab:
             result.write('{0}, '.format(item))
         result.write('\n')
         result.close()
 
-        warning = open(dir_path+'\\Warnings.txt', 'a', encoding='utf-8')
+        warning = open(dir_path + '\\Warnings.txt', 'a', encoding='utf-8')
         warning.write('Duplicate TC with different results !!!\nFollowint TC requires verification by the user.\n\n')
         for item in tab:
             warning.write('{0}, '.format(item))

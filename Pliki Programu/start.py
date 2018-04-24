@@ -37,14 +37,15 @@ class StartQT4(QtGui.QMainWindow):
 
 
         # --------------------------------------------------------------------------
-        # self.ui.moduleNumber.setText('Z10')
-        # self.ui.comboBoxLoc.setCurrentIndex(5)
+        self.ui.moduleNumber.setText('Z10')
+        self.ui.comboBoxLoc.setCurrentIndex(5)
 
 
     # Wyszukiwarka plików txt i csv
     def browse_txt_file(self):
         browserTxt = QtGui.QFileDialog(self)
-        self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop')
+        # self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~') + '\\Desktop')
+        self.filename = browserTxt.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\Presentation\\2G\\temp\\KC205')
         if isfile(self.filename):
             plikTxt = open(self.filename)
             if os.path.basename(plikTxt.name)[-4:] == '.txt' or os.path.basename(plikTxt.name)[-4:] == '.csv':
@@ -58,7 +59,8 @@ class StartQT4(QtGui.QMainWindow):
     # Wyszukiwarka plików xls
     def browse_xls_file(self):
         browserXls = QtGui.QFileDialog(self)
-        self.filename = browserXls.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop')
+        # self.filename = browserXls.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop')
+        self.filename = browserXls.getOpenFileName(self, 'Open file', os.path.expanduser('~')+'\\Desktop\\TeRI_Results\\Presentation')
         if isfile(self.filename):
             plikXls = open(self.filename)
             if os.path.basename(plikXls.name)[-4:] == '.xls':
@@ -159,7 +161,8 @@ class StartQT4(QtGui.QMainWindow):
 
                 if self.ui.moduleNumber.text() != '':
                     moduleNumber = self.moduleFormat()
-                    result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch, testRunType=testRunType,
+                    result = searchTcInExcel(pathXlsFile=self.pathXlsFile, logPatch=logPatch,
+                                             testRunType=testRunType,
                                              moduleNumber=moduleNumber, excelSheetName=excelSheetName,
                                              location=location)
                     if result == 'Done':
@@ -177,6 +180,10 @@ class StartQT4(QtGui.QMainWindow):
 
             else:
                 self.showDialog(7)
+            # else:
+            #     QtGui.QMessageBox.warning(self, 'Permission denied', 'File '+os.path.basename(self.pathXlsFile)+' is already opened.\n'
+            #                                                         'Please close document and start process again',
+            #                               QtGui.QMessageBox.Ok)
         else:
             self.showDialog(2)
 
@@ -234,6 +241,8 @@ class StartQT4(QtGui.QMainWindow):
         except AttributeError:
             pass
 
+    def checkExcelStatus(self, xlsFile):
+        pass
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     myapp = StartQT4()
